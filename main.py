@@ -43,6 +43,39 @@ async def embed(interaction: discord.Interaction, titl: str, desc: str):
     )
     await interaction.response.send_message(embed=embed)
 
+@client.tree.command(name="loa", description="File for LOA.", guild=GUILD_ID)
+async def loa(
+    interaction: discord.Interaction,
+    user: discord.Member,
+    day: int,
+    month: int,
+    year: int,
+    reason: str
+):
+
+    channel2 = interaction.guild.get_channel(1467556173422264452)
+
+    if channel2 is None:
+        await interaction.response.send_message("LOA channel not found.", ephemeral=True)
+        return
+
+    embed = discord.Embed(
+        title="📌 Leave of Absence Request.",
+        description=f"{interaction.user.mention} has requested LOA.",
+        color=discord.Color.red()
+    )
+
+    embed.add_field(name="User", value=user.mention, inline=False)
+    embed.add_field(name="End Date", value=f"{day:02d}/{month:02d}/{year}", inline=False)
+    embed.add_field(name="Reason", value=reason, inline=False)
+    embed.add_field(name="Filed By", value=interaction.user.mention, inline=False)
+
+    embed.set_footer(text=f"User ID: {user.id}")
+
+    await channel2.send(embed=embed)
+
+    await interaction.response.send_message("LOA submitted successfully.", ephemeral=True)
+
 @client.tree.command(name="session", description="Start a session/poll", guild=GUILD_ID)
 @app_commands.choices(
     type=[
