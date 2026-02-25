@@ -14,19 +14,8 @@ class Client(commands.Bot):
             synced = await self.tree.sync(guild=guild)
             print(f'Synced {len(synced)} command(s) to guild {guild.id}')
         except Exception as e:
-            print(f'Error syncing commands: {e}')
+            print(f'Error syncing commands: {e}'))
 
-    async def on_message(self, message):
-        if message.author == self.user:
-            return
-
-        if message.content.lower().startswith('afk'):
-            await message.channel.send(f'Cya later, {message.author}')
-
-    async def on_reaction_add(self, reaction, user):
-        if user == self.user:
-            return
-        await reaction.message.channel.send('You reacted!')
 
 
 intents = discord.Intents.default()
