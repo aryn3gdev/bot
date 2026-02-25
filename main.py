@@ -10,7 +10,7 @@ class Client(commands.Bot):
         print(f'Logged on as {self.user}!')
 
         try:
-            guild = discord.Object(id=1463577470191140896)
+            guild = discord.Object(id=1459911881119502574)
             synced = await self.tree.sync(guild=guild)
             print(f'Synced {len(synced)} command(s) to guild {guild.id}')
         except Exception as e:
@@ -35,7 +35,7 @@ intents.reactions = True  # good practice
 
 client = Client(command_prefix="?", intents=intents)
 
-GUILD_ID = discord.Object(id=1463577470191140896)
+GUILD_ID = discord.Object(id=1459911881119502574)
 
 @client.tree.command(name="hello", description="Say hello!", guild=GUILD_ID)
 async def sayHello(interaction: discord.Interaction):
@@ -54,20 +54,44 @@ async def embed(interaction: discord.Interaction, titl: str, desc: str):
     )
     await interaction.response.send_message(embed=embed)
 
-@client.tree.command(name="server", description="Toggle server status.", guild=GUILD_ID)
-async def server_status(interaction: discord.Interaction):
-    channel = interaction.guild.get_channel(1463611154889707543)
+@client.tree.command(name="session", description="Start a session/poll", guild=GUILD_ID)
+@app_commands.choices(
+    type=[
+        app_commands.Choice(name="Start", value="start"),
+        app_commands.Choice(name="Poll", value="poll"),
+    ]
+)
+async def session(
+    interaction: discord.Interaction,
+    type: app_commands.Choice[str]
+):
+    channel = interaction.guild.get_channel(1467556288677281806)
 
     if channel is None:
         await interaction.response.send_message("Channel not found.", ephemeral=True)
         return
 
-    if channel.name == "Status-❎":
-        await channel.edit(name="Status-✅")
-        await interaction.response.send_message("Server is now ONLINE.")
-    else:
-        await channel.edit(name="Status-❎")
-        await interaction.response.send_message("Server is now OFFLINE.")
+    if type.value == "start":
+        embed = discord.Embed(
+            title="🏁 Session Startup 🟢"
+            description=f"{interaction.user.mention} has started a session! Join up. 
+            You can find the game link [here.](https://www.roblox.com/games/127209441614859/Our-Campus-V1)
+            
+            ||@everyone||"
+        await interaction.response.send_message("Session started.")
+
+    elif type.value == "poll":
+        embed = discord.Embed(
+            title="🏁 Session Poll 🟢"
+            description=f"A session poll has started. Press the green tick if you are attending, the red X if you are **NOT** attending and the yellow circle if your unsure.
+            Please check <#1459915331739848915> before joining in-game.
+            
+            ||@everyone||"
+        await interaction.response.send_message("Session started.")
+
+        await msg.add_reaction("✅")
+        await msg.add_reaction("❌")
+        await msg.add_reaction("🟡")
 
 # 👇 Render Environment Variable Section
 TOKEN = os.environ.get("TOKEN")
