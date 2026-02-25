@@ -75,6 +75,8 @@ async def loa(
     await channel2.send(embed=embed)
 
     await interaction.response.send_message("LOA submitted successfully.", ephemeral=True)
+    await msg.add_reaction("🟢")
+    await msg.add_reaction("🔴")
 
 @client.tree.command(name="session", description="Start a session/poll", guild=GUILD_ID)
 @app_commands.choices(
