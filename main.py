@@ -73,26 +73,42 @@ async def session(
 
     if type.value == "start":
         embed = discord.Embed(
-            title="🏁 Session Startup 🟢"
-            description=f"{interaction.user.mention} has started a session! Join up. 
-            You can find the game link [here.](https://www.roblox.com/games/127209441614859/Our-Campus-V1)
-            
-            ||@everyone||"
-        await interaction.response.send_message("Session started.")
+            title="🏁 Session Startup 🟢",
+            description=f"""\
+{interaction.user.mention} has started a session! Join up.
+
+You can find the game link [here.](https://www.roblox.com/games/127209441614859/Our-Campus-V1)
+
+||@everyone||
+"""
+        )
+
+        await channel.send(embed=embed)
+        await interaction.response.send_message("Session started.", ephemeral=True)
 
     elif type.value == "poll":
         embed = discord.Embed(
-            title="🏁 Session Poll 🟢"
-            description=f"A session poll has started. Press the green tick if you are attending, the red X if you are **NOT** attending and the yellow circle if your unsure.
-            Please check <#1459915331739848915> before joining in-game.
-            
-            ||@everyone||"
-        await interaction.response.send_message("Session started.")
+            title="🏁 Session Poll 🟢",
+            description="""\
+A session poll has started.
+
+Press the green tick if you are attending,
+the red X if you are NOT attending,
+and the yellow circle if you're unsure.
+
+Please check <#1459915331739848915> before joining in-game.
+
+||@everyone||
+"""
+        )
+
+        msg = await channel.send(embed=embed)
 
         await msg.add_reaction("✅")
         await msg.add_reaction("❌")
         await msg.add_reaction("🟡")
 
+        await interaction.response.send_message("Poll started.", ephemeral=True)
 # 👇 Render Environment Variable Section
 TOKEN = os.environ.get("TOKEN")
 
